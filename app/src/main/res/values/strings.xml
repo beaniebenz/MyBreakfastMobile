@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name">My Breakfast</string>
+    <string name="about">About</string>
+    <string name="bahan">Bahan-bahan</string>
+    <string name="langkah">Langkah-langkah</string>
+    <string-array name="data_name">
+        <item>Ayam Kecap Goreng Mentega</item>
+        <item>Telur Dadar Padang</item>
+        <item>Tahu Telur</item>
+        <item>Nasi Jagung</item>
+        <item>Nasi Tomat</item>
+        <item>Kimbab</item>
+        <item>Bubur Merah Putih</item>
+        <item>Bolu Mentega</item>
+        <item>Ayam Rica-Rica</item>
+        <item>Spaghetti Brulee</item>
+    </string-array>
+    <string-array name="data_description">
+        <item>Ayam kecap goreng mentega adalah hidangan ayam yang digoreng kering, lalu dimasak dengan kecap dan mentega, menciptakan rasa manis gurih yang lezat.</item>
+        <item>Telur dadar Padang merupakan omelet khas Padang yang kaya akan rempah-rempah, seringkali disajikan dengan kuah gulai yang pedas.</item>
+        <item>Tahu telur adalah hidangan Indonesia yang terbuat dari tahu yang digoreng dan disajikan dengan saus kacang serta telur dadar.</item>
+        <item>Nasi jagung adalah nasi yang dibuat dengan campuran jagung, memberikan cita rasa manis dan konsistensi yang unik.</item>
+        <item>Nasi tomat adalah nasi yang dimasak dengan tambahan saus tomat, memberikan warna dan rasa yang berbeda.</item>
+        <item>Kimbab adalah hidangan Korea yang terdiri dari nasi, sayuran, daging atau ikan, dan kadang-kadang telur, yang digulung dalam rumput laut panggang.</item>
+        <item>Bubur merah putih adalah bubur tradisional Indonesia yang terbuat dari beras merah dan beras putih, seringkali disajikan dengan kelapa parut dan gula merah.</item>
+        <item>Bolu mentega adalah kue lembut dan beraroma mentega, seringkali dihidangkan sebagai camilan atau hidangan penutup.</item>
+        <item>Ayam rica-rica adalah hidangan Indonesia yang menggunakan ayam yang dimasak dengan bumbu pedas khas Sulawesi, menciptakan cita rasa yang kuat dan pedas.</item>
+        <item>Spaghetti brulee adalah hidangan pasta Italia yang dihidangkan dengan saus tomat yang diolah dengan cara khusus dan disajikan dengan lapisan renyah di atasnya.</item>
+    </string-array>
+    <integer-array name="data_photo">
+        <item>@drawable/ayam_kecap</item>
+        <item>@drawable/dadar_padang</item>
+        <item>@drawable/tahu_telur</item>
+        <item>@drawable/nasi_jagung</item>
+        <item>@drawable/nasi_tomat</item>
+        <item>@drawable/kimbab</item>
+        <item>@drawable/bubur_merah</item>
+        <item>@drawable/bolu_mentega</item>
+        <item>@drawable/ayam_rica</item>
+        <item>@drawable/spageti_brulee</item>
+    </integer-array>
+</resources>
