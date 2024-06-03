@@ -32,13 +32,11 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
     }
 
     private fun fetchMeals() {
-        // Setting up OkHttpClient and Request for API call
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+            .url("https://www.themealdb.com/api/json/v1/1/search.php?f=b")
             .build()
 
-        // Making an asynchronous API call
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle failure to fetch data
@@ -52,7 +50,6 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                         val json = JSONObject(responseBody.string())
                         val mealsArray = json.getJSONArray("meals")
 
-                        // Parsing JSON response and populating the list
                         for (i in 0 until mealsArray.length()) {
                             val mealObject = mealsArray.getJSONObject(i)
                             val meal = Meal(
@@ -63,7 +60,6 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                             list.add(meal)
                         }
 
-                        // Updating UI on the main thread
                         runOnUiThread {
                             val listCharAdapter = ListBreakfastAdapter(list, this@MainActivity)
                             rvBreakfasts.adapter = listCharAdapter
@@ -97,8 +93,6 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
     }
 
     override fun onItemClick(mealId: String) {
-        // Handle item click here
-        // For example, you can start a new activity with the meal ID
         val intent = Intent(this, MealDetailActivity::class.java)
         intent.putExtra("MEAL_ID", mealId)
         startActivity(intent)
