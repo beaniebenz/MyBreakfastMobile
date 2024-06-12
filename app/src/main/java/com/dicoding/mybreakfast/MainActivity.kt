@@ -116,35 +116,8 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
     }
 
     private fun showFavoriteMeals() {
-        val favoriteMeals = arrayListOf<Meal>()
-        val dbHelper = MealDatabaseHelper(this)
-        val db = dbHelper.readableDatabase
-        val cursor = db.query(
-            MealDatabaseHelper.TABLE_FAVORITE_MEALS,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null
-        )
-
-        while (cursor.moveToNext()) {
-            val mealId = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_ID))
-            val mealName = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_NAME))
-            val mealThumb = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_THUMB))
-            favoriteMeals.add(Meal(mealId, mealName, mealThumb, true))
-        }
-
-        cursor.close()
-        db.close()
-
-        list.clear()
-        list.addAll(favoriteMeals)
-
-        runOnUiThread {
-            rvBreakfasts.adapter?.notifyDataSetChanged()
-        }
+        val intent = Intent(this, FavoriteMealsActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onItemClick(mealId: String) {
