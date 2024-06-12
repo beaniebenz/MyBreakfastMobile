@@ -6,4 +6,9 @@
         android:title="@string/about"
         android:icon="@drawable/ic_baseline_account_circle_24"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/favorite"
+        android:title="Favorite"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
 </menu>

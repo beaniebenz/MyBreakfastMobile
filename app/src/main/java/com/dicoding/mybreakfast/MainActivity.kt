@@ -12,6 +12,8 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import com.dicoding.mybreakfast.model.Meal
+import com.dicoding.mybreakfast.database.MealDatabaseHelper
+import com.dicoding.mybreakfast.ListBreakfastAdapter
 
 
 class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListener {
@@ -73,6 +75,24 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
         })
     }
 
+    private fun isMealFavorite(mealId: String): Boolean {
+        val dbHelper = MealDatabaseHelper(this)
+        val db = dbHelper.readableDatabase
+        val cursor = db.query(
+            MealDatabaseHelper.TABLE_FAVORITE_MEALS,
+            null,
+            "${MealDatabaseHelper.COLUMN_MEAL_ID} = ?",
+            arrayOf(mealId),
+            null,
+            null,
+            null
+        )
+        val isFavorite = cursor.count > 0
+        cursor.close()
+        db.close()
+        return isFavorite
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
@@ -89,6 +109,41 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                 val goAbout = Intent(this@MainActivity, AboutActivity::class.java)
                 startActivity(goAbout)
             }
+            R.id.favorite -> {
+                showFavoriteMeals()
+            }
+        }
+    }
+
+    private fun showFavoriteMeals() {
+        val favoriteMeals = arrayListOf<Meal>()
+        val dbHelper = MealDatabaseHelper(this)
+        val db = dbHelper.readableDatabase
+        val cursor = db.query(
+            MealDatabaseHelper.TABLE_FAVORITE_MEALS,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+        )
+
+        while (cursor.moveToNext()) {
+            val mealId = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_ID))
+            val mealName = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_NAME))
+            val mealThumb = cursor.getString(cursor.getColumnIndexOrThrow(MealDatabaseHelper.COLUMN_MEAL_THUMB))
+            favoriteMeals.add(Meal(mealId, mealName, mealThumb, true))
+        }
+
+        cursor.close()
+        db.close()
+
+        list.clear()
+        list.addAll(favoriteMeals)
+
+        runOnUiThread {
+            rvBreakfasts.adapter?.notifyDataSetChanged()
         }
     }
 
