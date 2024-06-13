@@ -12,6 +12,8 @@ import okhttp3.*
 import org.json.JSONObject
 import java.io.IOException
 import com.dicoding.mybreakfast.model.Meal
+import com.dicoding.mybreakfast.database.MealDatabaseHelper
+import com.dicoding.mybreakfast.ListBreakfastAdapter
 
 
 class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListener {
@@ -32,13 +34,11 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
     }
 
     private fun fetchMeals() {
-        // Setting up OkHttpClient and Request for API call
         val client = OkHttpClient()
         val request = Request.Builder()
-            .url("https://www.themealdb.com/api/json/v1/1/search.php?f=a")
+            .url("https://www.themealdb.com/api/json/v1/1/search.php?f=b")
             .build()
 
-        // Making an asynchronous API call
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 // Handle failure to fetch data
@@ -52,7 +52,6 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                         val json = JSONObject(responseBody.string())
                         val mealsArray = json.getJSONArray("meals")
 
-                        // Parsing JSON response and populating the list
                         for (i in 0 until mealsArray.length()) {
                             val mealObject = mealsArray.getJSONObject(i)
                             val meal = Meal(
@@ -63,7 +62,6 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                             list.add(meal)
                         }
 
-                        // Updating UI on the main thread
                         runOnUiThread {
                             val listCharAdapter = ListBreakfastAdapter(list, this@MainActivity)
                             rvBreakfasts.adapter = listCharAdapter
@@ -75,6 +73,24 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                 }
             }
         })
+    }
+
+    private fun isMealFavorite(mealId: String): Boolean {
+        val dbHelper = MealDatabaseHelper(this)
+        val db = dbHelper.readableDatabase
+        val cursor = db.query(
+            MealDatabaseHelper.TABLE_FAVORITE_MEALS,
+            null,
+            "${MealDatabaseHelper.COLUMN_MEAL_ID} = ?",
+            arrayOf(mealId),
+            null,
+            null,
+            null
+        )
+        val isFavorite = cursor.count > 0
+        cursor.close()
+        db.close()
+        return isFavorite
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -93,12 +109,18 @@ class MainActivity : AppCompatActivity(), ListBreakfastAdapter.OnItemClickListen
                 val goAbout = Intent(this@MainActivity, AboutActivity::class.java)
                 startActivity(goAbout)
             }
+            R.id.favorite -> {
+                showFavoriteMeals()
+            }
         }
     }
 
+    private fun showFavoriteMeals() {
+        val intent = Intent(this, FavoriteMealsActivity::class.java)
+        startActivity(intent)
+    }
+
     override fun onItemClick(mealId: String) {
-        // Handle item click here
-        // For example, you can start a new activity with the meal ID
         val intent = Intent(this, MealDetailActivity::class.java)
         intent.putExtra("MEAL_ID", mealId)
         startActivity(intent)

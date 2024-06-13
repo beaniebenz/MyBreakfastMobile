@@ -8,11 +8,10 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
+import org.json.JSONObject
 import java.io.IOException
-import com.dicoding.mybreakfast.R
 import android.widget.ImageView
-
-
+import android.widget.TextView
 
 class MealDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,10 +21,7 @@ class MealDetailActivity : AppCompatActivity() {
         val mealId = intent.getStringExtra("MEAL_ID")
         if (mealId != null) {
             fetchMealDetail(mealId)
-        } else {
         }
-
-
     }
 
     private fun fetchMealDetail(mealId: String) {
@@ -39,20 +35,37 @@ class MealDetailActivity : AppCompatActivity() {
                 val response = client.newCall(request).execute()
                 if (response.isSuccessful) {
                     val responseBody = response.body?.string()
-                    withContext(Dispatchers.Main) {
-                        val mealImage = findViewById<ImageView>(R.id.meal_image)
-                        Glide.with(this@MealDetailActivity)
-                            .load("https://www.themealdb.com/images/media/meals/wvpsxx1468256321.jpg")
-                            .placeholder(R.drawable.placeholder_image)
-                            .error(R.drawable.error_image)
-                            .into(mealImage)
+                    responseBody?.let {
+                        val json = JSONObject(it)
+                        val mealArray = json.getJSONArray("meals")
+                        val mealObject = mealArray.getJSONObject(0)
+
+                        val mealName = mealObject.getString("strMeal")
+                        val mealCategory = mealObject.getString("strCategory")
+                        val mealInstructions = mealObject.getString("strInstructions")
+                        val mealImageUrl = mealObject.getString("strMealThumb")
+
+                        withContext(Dispatchers.Main) {
+                            val mealImage = findViewById<ImageView>(R.id.meal_image)
+                            val mealNameTextView = findViewById<TextView>(R.id.meal_name)
+                            val mealCategoryTextView = findViewById<TextView>(R.id.meal_category)
+                            val mealInstructionsTextView = findViewById<TextView>(R.id.meal_instructions)
+
+                            mealNameTextView.text = mealName
+                            mealCategoryTextView.text = mealCategory
+                            mealInstructionsTextView.text = mealInstructions
+
+                            Glide.with(this@MealDetailActivity)
+                                .load(mealImageUrl)
+                                .placeholder(R.drawable.placeholder_image)
+                                .error(R.drawable.error_image)
+                                .into(mealImage)
+                        }
                     }
                 } else {
-
                 }
             } catch (e: IOException) {
                 e.printStackTrace()
-
             }
         }
     }

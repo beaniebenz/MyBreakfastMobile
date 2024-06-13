@@ -39,4 +39,5 @@
         <item>@drawable/ayam_rica</item>
         <item>@drawable/spageti_brulee</item>
     </integer-array>
+    <string name="favorite_button">Favorite</string>
 </resources>
